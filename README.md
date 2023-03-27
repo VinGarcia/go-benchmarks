@@ -18,9 +18,9 @@ goos: darwin
 goarch: amd64
 pkg: github.com/vingarcia/go-benchmarks
 cpu: VirtualApple @ 2.50GHz
-BenchmarkMapKeys/using_strings-10         	28784778	       207.6 ns/op
-BenchmarkMapKeys/using_strings_optimized-10 50145543	       126.2 ns/op
-BenchmarkMapKeys/using_structs-10           87705032	       67.55 ns/op
+BenchmarkMapKeys/using_strings-10                   	27261306	       219.2 ns/op
+BenchmarkMapKeys/using_strings_optimized-10         	56691573	       109.0 ns/op
+BenchmarkMapKeys/using_structs-10                   	88877367	       66.34 ns/op
 PASS
-ok  	github.com/vingarcia/go-benchmarks	19.321s
+ok  	github.com/vingarcia/go-benchmarks	19.116s
 ```

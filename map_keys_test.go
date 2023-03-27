@@ -48,11 +48,17 @@ func BenchmarkMapKeys(b *testing.B) {
 	// by ignoring the contents of the map:
 	fmt.Fprintln(file, ageCache)
 
+	// Otimization so that we don't have to convert integers to string inside the benchmark:
+	var intToStr = make([]string, 30)
+	for i := 0; i < 30; i++ {
+		intToStr[i] = strconv.Itoa(i)
+	}
+
 	b.Run("using strings optimized", func(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			i := rand.Intn(15)
 			j := rand.Intn(15)
-			key := "keyI" + strconv.Itoa(i) + "|keyJ" + strconv.Itoa(j) + "|keyIJ" + strconv.Itoa(i+j)
+			key := "keyI" + intToStr[i] + "|keyJ" + intToStr[j] + "|keyIJ" + intToStr[i+j]
 			ageCache = stringMap[key].Age
 		}
 	})
