@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
+	"os"
 	"strconv"
 	"testing"
 )
@@ -16,6 +18,12 @@ type SomeStruct struct {
 var ageCache int
 
 func BenchmarkMapKeys(b *testing.B) {
+	file, err := os.CreateTemp("", "*")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.Remove(file.Name())
+
 	stringMap := map[string]*SomeStruct{}
 	for i := 0; i < 15; i++ {
 		for j := 0; j < 15; j++ {
@@ -36,7 +44,9 @@ func BenchmarkMapKeys(b *testing.B) {
 		}
 	})
 
-	fmt.Println(ageCache)
+	// This is done just to force Go not to optimize the benchmarks
+	// by ignoring the contents of the map:
+	fmt.Fprintln(file, ageCache)
 
 	b.Run("using strings optimized", func(b *testing.B) {
 		for n := 0; n < b.N; n++ {
@@ -47,7 +57,9 @@ func BenchmarkMapKeys(b *testing.B) {
 		}
 	})
 
-	fmt.Println(ageCache)
+	// This is done just to force Go not to optimize the benchmarks
+	// by ignoring the contents of the map:
+	fmt.Fprintln(file, ageCache)
 
 	type keyType struct {
 		KeyI  int
@@ -82,5 +94,7 @@ func BenchmarkMapKeys(b *testing.B) {
 		}
 	})
 
-	fmt.Println(ageCache)
+	// This is done just to force Go not to optimize the benchmarks
+	// by ignoring the contents of the map:
+	fmt.Fprintln(file, ageCache)
 }
