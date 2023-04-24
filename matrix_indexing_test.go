@@ -6,43 +6,44 @@ import (
 )
 
 func BenchmarkMatrixIndexing(b *testing.B) {
-	randomIndexer := make([]int, 200)
-	for i := 0; i < 200; i++ {
-		randomIndexer[i] = rand.Intn(200)
+	size := 200
+	randomIndexer := make([]int, size)
+	for i := 0; i < size; i++ {
+		randomIndexer[i] = rand.Intn(size)
 	}
 
-	oneSlice := make([]int, 200*200)
-	sliceOfSlicesOptimized := make([][]int, 200)
-	for i := 0; i < 200; i++ {
-		sliceOfSlicesOptimized[i] = oneSlice[i*200 : i*200+200]
+	oneSlice := make([]int, size*size)
+	sliceOfSlicesOptimized := make([][]int, size)
+	for i := 0; i < size; i++ {
+		sliceOfSlicesOptimized[i] = oneSlice[i*size : i*size+size]
 	}
 
-	sliceOfSlices := make([][]int, 200)
-	for i := 0; i < 200; i++ {
-		sliceOfSlices[i] = make([]int, 200)
+	sliceOfSlices := make([][]int, size)
+	for i := 0; i < size; i++ {
+		sliceOfSlices[i] = make([]int, size)
 	}
 
 	b.Run("slice of slices", func(b *testing.B) {
 		for k := 0; k < b.N; k++ {
-			i := randomIndexer[k%200]
-			j := randomIndexer[199-k%200]
+			i := randomIndexer[k%size]
+			j := randomIndexer[(size-1)-k%size]
 			sliceOfSlices[i][j]++
 		}
 	})
 
 	b.Run("slice of slices single allocation", func(b *testing.B) {
 		for k := 0; k < b.N; k++ {
-			i := randomIndexer[k%200]
-			j := randomIndexer[199-k%200]
+			i := randomIndexer[k%size]
+			j := randomIndexer[(size-1)-k%size]
 			sliceOfSlicesOptimized[i][j]++
 		}
 	})
 
 	b.Run("single slice", func(b *testing.B) {
 		for k := 0; k < b.N; k++ {
-			i := randomIndexer[k%200]
-			j := randomIndexer[199-k%200]
-			oneSlice[i*200+j]++
+			i := randomIndexer[k%size]
+			j := randomIndexer[(size-1)-k%size]
+			oneSlice[i*size+j]++
 		}
 	})
 }
