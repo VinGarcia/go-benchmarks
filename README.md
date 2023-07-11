@@ -25,7 +25,7 @@ PASS
 ok  	github.com/vingarcia/go-benchmarks	24.823s
 ```
 
-## What is the fasted way to work with a Matrix in Golang?
+## What is the fastest way to work with a Matrix in Golang?
 
 When creating matrixes I've seen some people using a single big array to represent
 matrixes supposedly for performance reasons. So I decided to put that to proof.
@@ -49,4 +49,19 @@ BenchmarkMatrixIndexing/slice_of_slices_single_allocation-10	1000000000	        
 BenchmarkMatrixIndexing/single_slice-10                     	1000000000	         1.600 ns/op
 PASS
 ok  	github.com/vingarcia/go-benchmarks	24.823s
+```
+
+## How much slower is the code when using Mutex?
+
+```bash
+make
+go test -bench=. -benchtime=5s
+goos: darwin
+goarch: amd64
+pkg: github.com/vingarcia/go-benchmarks
+cpu: VirtualApple @ 2.50GHz
+BenchmarkMutex/using_a_mutex-10     	424256799	        14.15 ns/op
+BenchmarkMutex/not_using_a_mutex-10 	1000000000	         0.3281 ns/op
+PASS
+ok  	github.com/vingarcia/go-benchmarks	32.661s
 ```
